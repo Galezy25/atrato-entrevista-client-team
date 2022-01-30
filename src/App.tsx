@@ -1,7 +1,20 @@
 
+import { useEffect, useState } from 'react';
+import { useDispatch, useStore } from 'react-redux';
+import { getUsers } from './actions/users.actions';
 import './App.css';
 
 function App() {
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState({});
+
+  useEffect(()=>{
+    dispatch(getUsers({
+      setLoading,
+      setError
+    }))
+  },[])
   return (
     <div className="bg-slate-400 p-3 max-w-fit">
       <h1 className="text-3xl font-bold text-primary-300">Hello world!</h1>

@@ -6,11 +6,17 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "@types/react-redux": "^7.1.22",
+    "axios": "^0.25.0",
+    "dotenv": "^14.3.2",
     "express": "^4.17.1",
     "nodemon": "^2.0.14",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-redux": "^7.2.6",
     "react-scripts": "4.0.3",
+    "redux": "^4.1.2",
+    "redux-thunk": "^2.4.1",
     "web-vitals": "^1.1.2"
   },
   "scripts": {
@@ -19,7 +25,8 @@
     "test": "react-scripts test",
     "coverage": "react-scripts test --coverage",
     "eject": "react-scripts eject",
-    "backend": "node ./node_modules/nodemon/bin/nodemon.js backend/server.js",
+    "start-production": "NODE_ENV=production node backend/server.js",
+    "backend": "NODE_ENV=development node ./node_modules/nodemon/bin/nodemon.js backend/server.js",
     "build-tailwind": "tailwindcss build -i src/index.css -o src/tailwind.output.css",
     "prestart": "npm run build-tailwind",
     "prebuild": "npm run build-tailwind"
@@ -51,5 +58,6 @@
     "postcss": "^8.4.5",
     "tailwindcss": "^3.0.17",
     "typescript": "^4.5.5"
-  }
+  },
+  "proxy": "http://localhost:5000"
 }
