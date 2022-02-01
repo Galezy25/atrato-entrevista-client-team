@@ -19,3 +19,9 @@ export enum UserStatus{
     IN_PROCESS,
     COMPLETED
 }
+
+export const STATUS_LABEL = {
+    [UserStatus.PENDING]: 'PENDIENTE',
+    [UserStatus.IN_PROCESS]: 'EN PROCESO',
+    [UserStatus.COMPLETED]: 'COMPLETADO'
+}

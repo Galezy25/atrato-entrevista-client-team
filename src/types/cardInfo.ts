@@ -1,7 +1,8 @@
 export interface CardInfo {
-    cardNumber: string,
-    cvv: string,
-    pin: string,
-    type: string,
-    date: string
+  cardNumber: string;
+  fullName: string;
+  cvv: string;
+  pin: string;
+  type: string;
+  date: string;
 }

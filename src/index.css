@@ -8,7 +8,27 @@
 
     /*@apply dark:text-neutral-100 dark:bg-neutral-900;*/
   }
+  h1 {
+    font-size: 60pt;
+  }
+  h2 {
+    font-size: 40pt;
+  }
+  h3 {
+    font-size: 28pt;
+  }
+  h4 {
+    font-size: 22pt;
+  }
+  h5 {
+    font-size: 20pt;
+  }
+  h6 {
+    font-size: 18pt;
+  }
 }
+
+@import "@fortawesome/fontawesome-free/css/all.css";
 
 body {
   margin: 0;

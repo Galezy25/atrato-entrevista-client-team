@@ -48,13 +48,13 @@ async function getInitialUsers() {
   let allSurnames = await getRandomApi('Name?nameType=surname&quantity=101');
   analysts = await getRandomApi('Name?nameType=fullname&quantity=31');
   for (let i = 0; i < 10; i++) {
-    let cardInfo = await getRandomApi('Card');
-    delete cardInfo.fullName;
     let firstName = firstNames[Math.round(Math.random() * 50)];
     let surnames = [
       allSurnames[Math.round(Math.random() * 100)],
       allSurnames[Math.round(Math.random() * 100)],
     ];
+    let cardInfo = await getRandomApi('Card');
+    cardInfo.fullName = `${firstName}${middleName ? ' '+ middleName: ''} ${surnames.join(' ')}`;
     ///*
     users.push({
       id: (Date.now() + i).toString(24),
