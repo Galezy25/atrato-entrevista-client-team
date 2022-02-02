@@ -1,9 +1,12 @@
 import { CardInfo } from '../types/cardInfo';
 import { Card } from './Card';
 
-export type CardInfoDetailsProps = CardInfo;
+export interface CardInfoDetailsProps extends CardInfo {
+  className?: string;
+}
 
 export function CardInfoDetails({
+  className = '',
   cardNumber,
   cvv,
   date,
@@ -12,7 +15,11 @@ export function CardInfoDetails({
 }: CardInfoDetailsProps) {
   const exp = new Date(date);
   return (
-    <Card className="bg-gray-500 max-w-fit p-5 grid grid-cols-1 gap-5">
+    <Card
+      className={
+        'bg-gray-500 max-w-fit p-5 grid grid-cols-1 gap-6 ' + className
+      }
+    >
       <div>
         <p className="text-neutral-400">FULL NAME</p>
         <p>{fullName}</p>

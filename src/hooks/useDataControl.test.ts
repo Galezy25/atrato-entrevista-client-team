@@ -1,4 +1,4 @@
-import {act, renderHook } from '@testing-library/react-hooks'
+import { act, renderHook } from '@testing-library/react-hooks';
 
 import useDataControl from './useDataControl.hook';
 
@@ -26,31 +26,30 @@ describe('useDataControl hook', () => {
     },
   ];
   test('Filter test', async () => {
-    const { result } = renderHook(() => useDataControl(allData))
-    act(()=>{
-        result.current.filter(el => el.category === 2);
-    })
+    const { result } = renderHook(() => useDataControl(allData));
+    act(() => {
+      result.current.filter((el) => el.category === 2);
+    });
     expect(result.current.data.length).toBe(2);
   });
   test('Sort test', async () => {
-    const { result } = renderHook(() => useDataControl(allData))
-    act(()=>{
-        result.current.sort('id');
-    })
-    expect(result.current.data.map(el => el.id).join(',')).toBe('a,b,c,d,e');
-    act(()=>{
-        result.current.sort('id','DESC');
-    })
-    expect(result.current.data.map(el => el.id).join(',')).toBe('e,d,c,b,a');
-
+    const { result } = renderHook(() => useDataControl(allData));
+    act(() => {
+      result.current.sort((el) => el.id);
+    });
+    expect(result.current.data.map((el) => el.id).join(',')).toBe('a,b,c,d,e');
+    act(() => {
+      result.current.sort((el) => el.id, 'DESC');
+    });
+    expect(result.current.data.map((el) => el.id).join(',')).toBe('e,d,c,b,a');
   });
 
-  test('Filter and sort', ()=>{
-    const { result } = renderHook(() => useDataControl(allData))
-    act(()=>{
-        result.current.filter(el => el.category === 1);
-        result.current.sort('id');
-    })
-    expect(result.current.data.map(el => el.id).join(',')).toBe('a,c');
-  })
+  test('Filter and sort', () => {
+    const { result } = renderHook(() => useDataControl(allData));
+    act(() => {
+      result.current.filter((el) => el.category === 1);
+      result.current.sort((el) => el.id);
+    });
+    expect(result.current.data.map((el) => el.id).join(',')).toBe('a,c');
+  });
 });

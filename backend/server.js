@@ -5,14 +5,13 @@ const path = require('path');
 require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` });
 
 const app = express();
-const PORT = 5000;
 
 let users = [];
 
 app.use(express.json());
 
-app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
+app.listen(process.env.PORT || 5000, () => {
+  console.log(`Server started on port ${process.env.PORT || 5000}`);
 });
 
 app.get('/api/users', async (_req, res) => {
@@ -22,7 +21,7 @@ app.get('/api/users', async (_req, res) => {
 app.post('/api/users', async (req, res) => {
   req.body.id = Date.now().toString(24);
   users.push(req.body);
-  res.statusCode(201).json(req.body);
+  res.status(201).json({...req.body});
 });
 
 app.patch('/api/users/:id', async (req, res) => {
@@ -34,7 +33,7 @@ app.patch('/api/users/:id', async (req, res) => {
 });
 
 app.delete('/api/users/:id', async (req, res) => {
-  users = users.filter(user => user.id === req.params.id);
+  users = users.filter(user => user.id !== req.params.id);
   res.sendStatus(200);
 });
 
@@ -54,6 +53,9 @@ async function getInitialUsers() {
       allSurnames[Math.round(Math.random() * 100)],
     ];
     let cardInfo = await getRandomApi('Card');
+    let middleName = Math.round(Math.random())
+    ? firstNames[Math.round(Math.random() * 50)]
+    : '';
     cardInfo.fullName = `${firstName}${middleName ? ' '+ middleName: ''} ${surnames.join(' ')}`;
     ///*
     users.push({
@@ -63,9 +65,7 @@ async function getInitialUsers() {
         await getRandomApi('Phone/Generate?CountryCode=mx&Quantity=1')
       )[0],
       firstName,
-      middleName: Math.round(Math.random())
-        ? firstNames[Math.round(Math.random() * 50)]
-        : '',
+      middleName,
       surnames: surnames.join(' '),
       birthday: new Date(
         Date.now() - Math.round(Math.random() * 630720000000 + 567648000000)
@@ -81,7 +81,7 @@ async function getInitialUsers() {
 async function getRandomApi(collection) {
   let response = await axios.get(`https://randommer.io/api/${collection}`, {
     headers: {
-      'X-Api-Key': 'f3b80c8d2c6a478e89445e919e625fff',
+      'X-Api-Key': process.env.RANDOM_API,
     },
   });
   return response.data;

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Field, Form, Formik } from 'formik';
+import { useState } from 'react';
+import { Field, Form, Formik, FormikProps } from 'formik';
 import { STATUS_LABEL, UserStatus } from '../types/user';
 import { Card } from './Card';
 
@@ -10,17 +10,21 @@ export interface SearchFilterOrderProps {
     _sortBy?: string;
     _sortOrder?: string;
   }) => void | Promise<any>;
-  initialValues: {
-    status?: string;
+  initialValues?: {
     _search?: string;
     _sortBy?: string;
     _sortOrder?: string;
+    status?: string;
   };
+  hasFilterSort?: boolean;
 }
+
+const INITIAL_VALUES = { _search: '', _sortBy: '', _sortOrder: '', status: '' };
 
 export function SearchFilterOrder({
   onSubmitHandler,
-  initialValues,
+  initialValues = {},
+  hasFilterSort,
 }: SearchFilterOrderProps) {
   const [showMore, setShowMore] = useState(false);
 
@@ -29,28 +33,46 @@ export function SearchFilterOrder({
   };
 
   return (
-    <Card className="bg-white p-2 max-w-fit">
-      <Formik initialValues={initialValues} onSubmit={onSubmitHandler}>
-        {() => (
-          <Form className="flex">
+    <div>
+      <Formik
+        initialValues={{ ...INITIAL_VALUES, ...initialValues }}
+        onSubmit={(values: { [key: string]: string }, actions) => {
+          actions.setSubmitting(false);
+          Object.getOwnPropertyNames(values).forEach((key) => {
+            if (!values[key]) {
+              delete values[key];
+            }
+          });
+          onSubmitHandler(values);
+          setShowMore(false);
+        }}
+        onReset={(_values, actions)=>{
+          actions.setValues(INITIAL_VALUES);
+          actions.submitForm();
+        }}
+      >
+        {(_props: FormikProps<any>) => (
+          <Form className="flex max-w-fit min-w-fit z-30">
             <Field
               className="p-2 bg-gray-200 rounded-md border-b-2 border-gray-500"
               name="_search"
               type="search"
-              defaultValue=""
               placeholder="Buscar"
             />
             {showMore && (
               <div
-                className="fixed min-w-full z-30 min-h-screen bg-transparent"
+                className="fixed min-w-full z-50 top-0 left-0 min-h-screen bg-neutral-600 opacity-25"
                 onClick={() => setShowMore(false)}
               ></div>
             )}
-            <div className="relative z-30">
+            <div className="relative z-50">
               <button
                 type="button"
                 title="Mas opciones"
-                className="p-2 bg-white hover:bg-gray-200 m-1 text-neutral-400"
+                className={
+                  'p-2 m-1 rounded-md min-w-max hover:bg-gray-500 hover:text-neutral-400 ' +
+                  (hasFilterSort ? 'bg-secondary-500 text-white' : 'bg-white text-neutral-400')
+                }
                 onClick={handleShowMoreClick}
               >
                 <i className="fas fa-filter"></i>
@@ -66,7 +88,6 @@ export function SearchFilterOrder({
                   className="p-2 bg-gray-200 rounded-md border-b-2 border-gray-500"
                   name="status"
                   as="select"
-                  defaultValue=""
                 >
                   <option value="">--Selecciona--</option>
                   <option value={UserStatus.PENDING}>
@@ -85,17 +106,15 @@ export function SearchFilterOrder({
                   className="p-2 bg-gray-200 rounded-md border-b-2 border-gray-500"
                   name="_sortBy"
                   as="select"
-                  defaultValue=""
                 >
                   <option value="">--Selecciona--</option>
-                  <option value="fullname">Nombre</option>
+                  <option value="fullName">Nombre</option>
                   <option value="id">ID</option>
                   <option value="status">Estado</option>
                 </Field>
                 <Field
                   as="select"
                   name="_sortOrder"
-                  defaultValue=""
                   className="p-2 bg-gray-200 w-full rounded-md border-b-2 border-gray-500"
                 >
                   <option value="ASC">ASC</option>
@@ -108,13 +127,19 @@ export function SearchFilterOrder({
                   >
                     Aplicar
                   </button>
+                  <button
+                    className="bg-secondary-500 hover:bg-secondary-700 text-white p-2"
+                    type="reset"
+                  >
+                    Limpiar
+                  </button>
                 </div>
               </Card>
             </div>
           </Form>
         )}
       </Formik>
-    </Card>
+    </div>
   );
 }
 

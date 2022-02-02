@@ -26,6 +26,9 @@
   h6 {
     font-size: 18pt;
   }
+  *:disabled {
+    @apply opacity-60 cursor-default;
+  }
 }
 
 @import "@fortawesome/fontawesome-free/css/all.css";

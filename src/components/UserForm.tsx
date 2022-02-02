@@ -1,6 +1,7 @@
-import { Field, Form, Formik } from 'formik';
+import { Field, Form, Formik, FormikErrors, FormikProps } from 'formik';
 import { STATUS_LABEL, User, UserStatus } from '../types/user';
 import LoadingElement from './LoadingElement';
+import validationSchema from './UserForm.validation';
 
 export interface UserFormProps {
   prev?: User;
@@ -29,7 +30,7 @@ const initialValues = {
 };
 
 const FIELD_CLASSNAME =
-  'rounded-md border-2 p-2 w-full bg-gray-200 border-gray-500';
+  'rounded-md border-2 p-2 w-full bg-gray-200 border-gray-500 ';
 
 export function UserForm({ prev, onSubmit, status = 'none' }: UserFormProps) {
   let disable = status !== 'none';
@@ -37,19 +38,22 @@ export function UserForm({ prev, onSubmit, status = 'none' }: UserFormProps) {
     <LoadingElement status={status} iconSize="5x">
       <Formik
         initialValues={prev || initialValues}
+        validationSchema={validationSchema}
         onSubmit={(values: any) => {
-          console.log(values);
+          values.status = +values.status
           onSubmit(values);
         }}
       >
-        {() => (
+        {({ errors, isValid }: FormikProps<any>) => (
           <Form className="py-4 px-2 sm:px-4 grid grid-cols-1 gap-2">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
               <div className="col-span-full sm:col-span-1 ">
                 <label htmlFor="firstName">Nombre</label>
                 <Field
                   disabled={disable}
-                  className={FIELD_CLASSNAME}
+                  className={
+                    FIELD_CLASSNAME + (errors.firstName && ' border-red-500')
+                  }
                   name="firstName"
                 />
               </div>
@@ -57,7 +61,9 @@ export function UserForm({ prev, onSubmit, status = 'none' }: UserFormProps) {
                 <label htmlFor="middleName">Segundo Nombre</label>
                 <Field
                   disabled={disable}
-                  className={FIELD_CLASSNAME}
+                  className={
+                    FIELD_CLASSNAME + (errors.middleName && ' border-red-500')
+                  }
                   name="middleName"
                 />
               </div>
@@ -65,7 +71,9 @@ export function UserForm({ prev, onSubmit, status = 'none' }: UserFormProps) {
                 <label htmlFor="surnames">Apellidos</label>
                 <Field
                   disabled={disable}
-                  className={FIELD_CLASSNAME}
+                  className={
+                    FIELD_CLASSNAME + (errors.surnames && ' border-red-500')
+                  }
                   name="surnames"
                 />
               </div>
@@ -73,7 +81,9 @@ export function UserForm({ prev, onSubmit, status = 'none' }: UserFormProps) {
                 <label htmlFor="email">Correo electronico</label>
                 <Field
                   disabled={disable}
-                  className={FIELD_CLASSNAME}
+                  className={
+                    FIELD_CLASSNAME + (errors.email && ' border-red-500')
+                  }
                   name="email"
                   type="email"
                 />
@@ -82,7 +92,9 @@ export function UserForm({ prev, onSubmit, status = 'none' }: UserFormProps) {
                 <label htmlFor="phone">Teléfono</label>
                 <Field
                   disabled={disable}
-                  className={FIELD_CLASSNAME}
+                  className={
+                    FIELD_CLASSNAME + (errors.phone && ' border-red-500')
+                  }
                   name="phone"
                   type="phone"
                 />
@@ -91,7 +103,9 @@ export function UserForm({ prev, onSubmit, status = 'none' }: UserFormProps) {
                 <label htmlFor="birthday">Fecha de Nacimiento</label>
                 <Field
                   disabled={disable}
-                  className={FIELD_CLASSNAME}
+                  className={
+                    FIELD_CLASSNAME + (errors.birthday && ' border-red-500')
+                  }
                   name="birthday"
                   type="date"
                 />
@@ -101,7 +115,9 @@ export function UserForm({ prev, onSubmit, status = 'none' }: UserFormProps) {
                 <Field
                   disabled={disable}
                   as="select"
-                  className={FIELD_CLASSNAME}
+                  className={
+                    FIELD_CLASSNAME + (errors.status && ' border-red-500')
+                  }
                   name="status"
                 >
                   <option value={UserStatus.PENDING}>
@@ -119,7 +135,9 @@ export function UserForm({ prev, onSubmit, status = 'none' }: UserFormProps) {
                 <label htmlFor="analyst">Analista asignado</label>
                 <Field
                   disabled={disable}
-                  className={FIELD_CLASSNAME}
+                  className={
+                    FIELD_CLASSNAME + (errors.analyst && ' border-red-500')
+                  }
                   name="analyst"
                 />
               </div>
@@ -131,7 +149,11 @@ export function UserForm({ prev, onSubmit, status = 'none' }: UserFormProps) {
                 <label htmlFor="cardInfo.fullName">Nombre en tarjeta</label>
                 <Field
                   disabled={disable}
-                  className={FIELD_CLASSNAME}
+                  className={
+                    FIELD_CLASSNAME +
+                    ((errors.cardInfo as FormikErrors<any> | undefined)
+                      ?.fullName && ' border-red-500')
+                  }
                   name="cardInfo.fullName"
                 />
               </div>
@@ -139,7 +161,11 @@ export function UserForm({ prev, onSubmit, status = 'none' }: UserFormProps) {
                 <label htmlFor="cardInfo.cardNumber">Numero</label>
                 <Field
                   disabled={disable}
-                  className={FIELD_CLASSNAME}
+                  className={
+                    FIELD_CLASSNAME +
+                    ((errors.cardInfo as FormikErrors<any> | undefined)
+                      ?.cardNumber && ' border-red-500')
+                  }
                   name="cardInfo.cardNumber"
                 />
               </div>
@@ -147,7 +173,11 @@ export function UserForm({ prev, onSubmit, status = 'none' }: UserFormProps) {
                 <label htmlFor="cardInfo.cvv">CVV</label>
                 <Field
                   disabled={disable}
-                  className={FIELD_CLASSNAME}
+                  className={
+                    FIELD_CLASSNAME +
+                    ((errors.cardInfo as FormikErrors<any> | undefined)?.cvv &&
+                      ' border-red-500')
+                  }
                   name="cardInfo.cvv"
                 />
               </div>
@@ -155,7 +185,11 @@ export function UserForm({ prev, onSubmit, status = 'none' }: UserFormProps) {
                 <label htmlFor="cardInfo.date">Fecha de vencimiento</label>
                 <Field
                   disabled={disable}
-                  className={FIELD_CLASSNAME}
+                  className={
+                    FIELD_CLASSNAME +
+                    ((errors.cardInfo as FormikErrors<any> | undefined)?.date &&
+                      ' border-red-500')
+                  }
                   name="cardInfo.date"
                   type="month"
                 />
@@ -164,7 +198,11 @@ export function UserForm({ prev, onSubmit, status = 'none' }: UserFormProps) {
                 <label htmlFor="cardInfo.type">Tipo</label>
                 <Field
                   disabled={disable}
-                  className={FIELD_CLASSNAME}
+                  className={
+                    FIELD_CLASSNAME +
+                    ((errors.cardInfo as FormikErrors<any> | undefined)?.type &&
+                      ' border-red-500')
+                  }
                   name="cardInfo.type"
                 />
               </div>
@@ -172,13 +210,18 @@ export function UserForm({ prev, onSubmit, status = 'none' }: UserFormProps) {
                 <label htmlFor="cardInfo.pin">Pin</label>
                 <Field
                   disabled={disable}
-                  className={FIELD_CLASSNAME}
+                  className={
+                    FIELD_CLASSNAME +
+                    ((errors.cardInfo as FormikErrors<any> | undefined)?.pin &&
+                      ' border-red-500')
+                  }
                   name="cardInfo.pin"
                 />
               </div>
             </div>
             <div className="flex justify-end">
               <button
+                disabled={!isValid}
                 type="submit"
                 className="rounded-md bg-primary-500 hover:bg-primary-700 text-white font-bold p-2"
               >

@@ -50,7 +50,7 @@ export function LoadingElement({
       default:
         break;
     }
-  }, [status, colorSuccess, colorError, colorLoading]);
+  }, [status, colorSuccess, colorError, colorLoading, iconSize]);
   return (
     <div className="relative min-w-fit min-h-fit ">
       <div className={`min-w-fit min-h-fit ${isOpacity && 'opacity-50'}`}>

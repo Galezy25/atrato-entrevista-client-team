@@ -92,7 +92,7 @@ export const createUser: ActionRequest<UsersActions> =
           },
         })
       ).json();
-      dispatch(setUsersAction(newUser));
+      dispatch(addUserAction(newUser));
     } catch (error) {
       setError(error);
     }
@@ -104,15 +104,14 @@ export const modifyUser: ActionRequest<UsersActions> =
   async (dispatch) => {
     try {
       setLoading(true);
-      await (
-        await httpApi(`users/${id}`)({
-          method: 'PATCH',
-          body: JSON.stringify(toModify),
-          headers: {
-            'Content-type': 'application/json',
-          },
-        })
-      ).json();
+
+      await httpApi(`users/${id}`)({
+        method: 'PATCH',
+        body: JSON.stringify(toModify),
+        headers: {
+          'Content-type': 'application/json',
+        },
+      });
       dispatch(modifyUserAction(id, toModify));
     } catch (error) {
       setError(error);
@@ -120,17 +119,14 @@ export const modifyUser: ActionRequest<UsersActions> =
     setLoading(false);
   };
 
-
-  export const removeUser: ActionRequest<UsersActions> =
+export const removeUser: ActionRequest<UsersActions> =
   ({ setLoading, setError }, id: string) =>
   async (dispatch) => {
     try {
       setLoading(true);
-      await (
-        await httpApi(`users/${id}`)({
-          method: 'DELETE'
-        })
-      ).json();
+      await httpApi(`users/${id}`)({
+        method: 'DELETE',
+      });
       dispatch(removeUserAction(id));
     } catch (error) {
       setError(error);
@@ -138,9 +134,3 @@ export const modifyUser: ActionRequest<UsersActions> =
     setLoading(false);
   };
 
-export default {
-  getUsers,
-  createUser,
-  modifyUser,
-  removeUser,
-};

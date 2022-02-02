@@ -4,7 +4,7 @@ export function useLoadingStatus() {
   const [status, setStatus] =
     useState<'none' | 'loading' | 'error' | 'success'>('none');
   const [lastError, setLastError] = useState<any>(undefined);
-  const createLoadingControl = useCallback(() => {
+  const createLoadingControl = useCallback((after: (error?: any)=>void = ()=>{}) => {
     let loadingControl = {
       error: undefined,
       setLoading: (isLoading: boolean) => {
@@ -14,11 +14,11 @@ export function useLoadingStatus() {
         } else if (loadingControl.error) {
           setStatus('error');
           setLastError(loadingControl.error);
-          setTimeout(() => setStatus('none'), 2000);
+          after(loadingControl.error);
         } else {
           setStatus('success');
           setLastError(undefined);
-          setTimeout(() => setStatus('none'), 2000);
+          after();
         }
       },
       setError: (error: any) => {
@@ -30,6 +30,7 @@ export function useLoadingStatus() {
   return {
     status,
     lastError,
+    setStatus,
     createLoadingControl,
   };
 }

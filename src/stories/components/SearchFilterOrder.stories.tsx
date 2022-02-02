@@ -15,5 +15,4 @@ const Template: ComponentStory<typeof SearchFilterOrder> = (args) => (
 
 export const Example = Template.bind({});
 Example.args = {
-  initialValues: {},
 };
