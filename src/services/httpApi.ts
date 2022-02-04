@@ -1,3 +1,5 @@
+const API_URL = process.env.REACT_APP_URL_API || '';
+
 export const httpApi =
   (path: string) =>
   ({
@@ -10,7 +12,7 @@ export const httpApi =
   }) => {
     let queryString = queryToString(query);
     return fetch(
-      `${process.env.REACT_APP_URL_API}/${path}${queryString}`,
+      `${API_URL}/${path}${queryString}`,
       init
     );
   };

@@ -52,4 +52,11 @@ describe('useDataControl hook', () => {
     });
     expect(result.current.data.map((el) => el.id).join(',')).toBe('a,c');
   });
+  test('Set new data', () => {
+    const { result } = renderHook(() => useDataControl<any>([]));
+    act(() => {
+      result.current.setAllData(allData);
+    });
+    expect(result.current.data).toMatchObject(allData);
+  });
 });

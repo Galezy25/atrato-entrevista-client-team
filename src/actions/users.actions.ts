@@ -105,13 +105,16 @@ export const modifyUser: ActionRequest<UsersActions> =
     try {
       setLoading(true);
 
-      await httpApi(`users/${id}`)({
+      let response = await httpApi(`users/${id}`)({
         method: 'PATCH',
         body: JSON.stringify(toModify),
         headers: {
           'Content-type': 'application/json',
         },
       });
+      if (response.status >= 400) {
+        throw response;
+      }
       dispatch(modifyUserAction(id, toModify));
     } catch (error) {
       setError(error);
@@ -124,13 +127,15 @@ export const removeUser: ActionRequest<UsersActions> =
   async (dispatch) => {
     try {
       setLoading(true);
-      await httpApi(`users/${id}`)({
+      const response = await httpApi(`users/${id}`)({
         method: 'DELETE',
       });
+      if (response.status >= 400) {
+        throw response;
+      }
       dispatch(removeUserAction(id));
     } catch (error) {
       setError(error);
     }
     setLoading(false);
   };
-

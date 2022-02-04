@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { getUsers } from './actions/users.actions';
 import LoadingElement from './components/LoadingElement';
 
@@ -21,19 +21,19 @@ const App = () => {
     }
   }, [users, status, dispatch, createLoadingControl]);
   return (
-    <BrowserRouter>
-      <LoadingElement status={status === 'success' ? 'none' : status}>
-        <NavBar />
-        <Routes>
-          {routes.map((route) => (
-            <Route {...route} />
-          ))}
-          <Route path="*" element={<Navigate to="users" replace />} />
-        </Routes>
-      </LoadingElement>
-    </BrowserRouter>
+    <LoadingElement status={status === 'success' ? 'none' : status}>
+      <NavBar />
+      <Routes>
+        {routes.map((route) => (
+          <Route
+            key={route.element?.toString() || Date.now().toString(36)}
+            {...route}
+          />
+        ))}
+        <Route path="*" element={<Navigate to="users" replace />} />
+      </Routes>
+    </LoadingElement>
   );
 };
 
 export default App;
-

@@ -1,4 +1,5 @@
 import { Field, Form, Formik, FormikErrors, FormikProps } from 'formik';
+import moment from 'moment';
 import { STATUS_LABEL, User, UserStatus } from '../types/user';
 import LoadingElement from './LoadingElement';
 import validationSchema from './UserForm.validation';
@@ -34,17 +35,29 @@ const FIELD_CLASSNAME =
 
 export function UserForm({ prev, onSubmit, status = 'none' }: UserFormProps) {
   let disable = status !== 'none';
+  if (prev) {
+    prev = {
+      ...prev,
+      birthday: moment(prev.birthday).format('YYYY-MM-DD'),
+      cardInfo: {
+        ...prev.cardInfo,
+        date: moment(prev.cardInfo.date).format('YYYY-MM'),
+      },
+    };
+  }
   return (
-    <LoadingElement status={status} iconSize="5x">
-      <Formik
-        initialValues={prev || initialValues}
-        validationSchema={validationSchema}
-        onSubmit={(values: any) => {
-          values.status = +values.status
-          onSubmit(values);
-        }}
-      >
-        {({ errors, isValid }: FormikProps<any>) => (
+    <Formik
+      initialValues={{ ...initialValues, ...prev }}
+      validationSchema={validationSchema}
+      onSubmit={(values: any) => {
+        values.status = +values.status;
+        values.birthday = moment(values.birthday, 'YYYY-MM-DD').format();
+        values.cardInfo.date = moment(values.cardInfo.date).format();
+        onSubmit(values);
+      }}
+    >
+      {({ errors, isValid }: FormikProps<any>) => (
+        <LoadingElement status={status} iconSize="5x">
           <Form className="py-4 px-2 sm:px-4 grid grid-cols-1 gap-2">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
               <div className="col-span-full sm:col-span-1 ">
@@ -58,7 +71,7 @@ export function UserForm({ prev, onSubmit, status = 'none' }: UserFormProps) {
                 />
               </div>
               <div className="col-span-full sm:col-span-1 ">
-                <label htmlFor="middleName">Segundo Nombre</label>
+                <label htmlFor="middleName">Segundo nombre</label>
                 <Field
                   disabled={disable}
                   className={
@@ -78,7 +91,7 @@ export function UserForm({ prev, onSubmit, status = 'none' }: UserFormProps) {
                 />
               </div>
               <div className="col-span-full md:col-span-2 ">
-                <label htmlFor="email">Correo electronico</label>
+                <label htmlFor="email">Correo</label>
                 <Field
                   disabled={disable}
                   className={
@@ -100,7 +113,7 @@ export function UserForm({ prev, onSubmit, status = 'none' }: UserFormProps) {
                 />
               </div>
               <div className="col-span-full sm:col-span-1">
-                <label htmlFor="birthday">Fecha de Nacimiento</label>
+                <label htmlFor="birthday">Fecha de nacimiento</label>
                 <Field
                   disabled={disable}
                   className={
@@ -111,7 +124,7 @@ export function UserForm({ prev, onSubmit, status = 'none' }: UserFormProps) {
                 />
               </div>
               <div className="col-span-full sm:col-span-1">
-                <label htmlFor="birthday">Estado</label>
+                <label htmlFor="status">Estatus</label>
                 <Field
                   disabled={disable}
                   as="select"
@@ -144,7 +157,7 @@ export function UserForm({ prev, onSubmit, status = 'none' }: UserFormProps) {
             </div>
             <hr className="border-neutral-400 my-4" />
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
-              <h4 className="col-span-full">Datos de la tarjeta</h4>
+              <h4 className="col-span-full">Información de la tarjeta</h4>
               <div className="col-span-full md:col-span-2">
                 <label htmlFor="cardInfo.fullName">Nombre en tarjeta</label>
                 <Field
@@ -158,7 +171,7 @@ export function UserForm({ prev, onSubmit, status = 'none' }: UserFormProps) {
                 />
               </div>
               <div className="col-span-full md:col-span-2">
-                <label htmlFor="cardInfo.cardNumber">Numero</label>
+                <label htmlFor="cardInfo.cardNumber">Número de tarjeta</label>
                 <Field
                   disabled={disable}
                   className={
@@ -195,7 +208,7 @@ export function UserForm({ prev, onSubmit, status = 'none' }: UserFormProps) {
                 />
               </div>
               <div>
-                <label htmlFor="cardInfo.type">Tipo</label>
+                <label htmlFor="cardInfo.type">Proveedor de tarjeta</label>
                 <Field
                   disabled={disable}
                   className={
@@ -207,7 +220,7 @@ export function UserForm({ prev, onSubmit, status = 'none' }: UserFormProps) {
                 />
               </div>
               <div>
-                <label htmlFor="cardInfo.pin">Pin</label>
+                <label htmlFor="cardInfo.pin">PIN</label>
                 <Field
                   disabled={disable}
                   className={
@@ -229,9 +242,9 @@ export function UserForm({ prev, onSubmit, status = 'none' }: UserFormProps) {
               </button>
             </div>
           </Form>
-        )}
-      </Formik>
-    </LoadingElement>
+        </LoadingElement>
+      )}
+    </Formik>
   );
 }
 

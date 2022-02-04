@@ -21,9 +21,7 @@ export function ListUsersPage() {
   );
 
   useEffect(() => {
-    if (users.length) {
-      setAllData(users);
-    }
+    setAllData(users);
   }, [users, setAllData]);
 
   useEffect(() => {

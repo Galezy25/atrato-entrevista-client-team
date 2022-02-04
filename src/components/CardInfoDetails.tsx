@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { CardInfo } from '../types/cardInfo';
 import { Card } from './Card';
 
@@ -13,7 +14,6 @@ export function CardInfoDetails({
   pin,
   fullName,
 }: CardInfoDetailsProps) {
-  const exp = new Date(date);
   return (
     <Card
       className={
@@ -39,7 +39,7 @@ export function CardInfoDetails({
         </div>
         <div>
           <p className="text-neutral-400">EXP</p>
-          <p>{`${exp.getMonth() + 1}/${(exp.getFullYear() + '').substr(2)}`}</p>
+          <p>{moment(date).format('YY/MM')}</p>
         </div>
       </div>
     </Card>

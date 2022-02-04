@@ -5,7 +5,10 @@ import { User } from '../types/user';
 
 export type UsersState = User[];
 
-const usersReducer: Reducer<UsersState, UsersActions> = (state = [], action) => {
+const usersReducer: Reducer<UsersState, UsersActions> = (
+  state = [],
+  action
+) => {
   switch (action.type) {
     case 'users/set':
       state = [...action.toSet, ...state].filter(
@@ -13,7 +16,9 @@ const usersReducer: Reducer<UsersState, UsersActions> = (state = [], action) => 
       );
       break;
     case 'users/add':
-      state = [action.toAdd, ...state];
+      state = [action.toAdd, ...state].filter(
+        (elA, i, ar) => i === ar.findIndex((elB) => elA.id === elB.id)
+      );
       break;
     case 'users/modify':
       state = state.map((oldUser) =>

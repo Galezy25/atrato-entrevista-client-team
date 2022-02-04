@@ -1,5 +1,7 @@
 import { useDispatch } from 'react-redux';
 
+import moment from 'moment'
+
 import { Card } from './Card';
 import CardInfoDetails from './CardInfoDetails';
 import LoadingElement from './LoadingElement';
@@ -117,7 +119,7 @@ export const CardUser = ({
                 FECHA DE NACIMIENTO
               </p>
 
-              <p>{new Date(birthday).toLocaleDateString()}</p>
+              <p>{moment(birthday).format('YYYY/MM/DD')}</p>
             </div>
 
             <div>
